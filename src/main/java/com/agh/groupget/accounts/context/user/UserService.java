@@ -1,8 +1,6 @@
 package com.agh.groupget.accounts.context.user;
 
-import com.agh.groupget.accounts.context.UserPublisher;
 import com.agh.groupget.accounts.domain.UserBasicInfo;
-import com.agh.groupget.accounts.domain.exception.UnauthorizedException;
 import com.agh.groupget.accounts.infrastructure.CognitoRequestFactory;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
 import com.amazonaws.services.cognitoidp.model.*;
@@ -50,7 +48,7 @@ class UserService {
 
 //    void deleteUser(String username) {
 //        if (!userBasicInfo.group().equals("Admins")) {
-//            throw new UnauthorizedException();
+//            throw new ForbiddenException();
 //        }
 //        adminDeleteUserRequest.setUsername(username);
 //        try {

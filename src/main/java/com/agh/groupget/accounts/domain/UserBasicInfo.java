@@ -28,4 +28,9 @@ public class UserBasicInfo {
     public Set<String> group() {
         return groups;
     }
+
+    public boolean isRemovalUsersFromGroupPermitted(String groupName) {
+        return groups.stream()
+              .anyMatch(groupName::equals);
+    }
 }

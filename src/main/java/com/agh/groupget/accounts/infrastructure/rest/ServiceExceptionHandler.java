@@ -2,9 +2,9 @@ package com.agh.groupget.accounts.infrastructure.rest;
 
 import com.agh.groupget.accounts.domain.ErrorResponse;
 import com.agh.groupget.accounts.domain.exception.BusinessException;
+import com.agh.groupget.accounts.domain.exception.ForbiddenException;
 import com.agh.groupget.accounts.domain.exception.RabbitException;
 import com.agh.groupget.accounts.domain.exception.ResourceNotFoundException;
-import com.agh.groupget.accounts.domain.exception.UnauthorizedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,8 +47,8 @@ class ServiceExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
-    @ExceptionHandler(UnauthorizedException.class)
-    ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException ex, WebRequest request) {
+    @ExceptionHandler(ForbiddenException.class)
+    ResponseEntity<ErrorResponse> handleUnauthorizedException(ForbiddenException ex, WebRequest request) {
         ErrorResponse response = new ErrorResponse();
         response.code = String.valueOf(HttpStatus.FORBIDDEN.value());
         response.message = ex.getMessage();

@@ -1,8 +1,8 @@
 package com.agh.groupget.accounts.domain.exception;
 
-public final class UnauthorizedException extends RuntimeException {
+public final class ForbiddenException extends RuntimeException {
 
-    public UnauthorizedException() {
+    public ForbiddenException() {
         super("You are not allowed to perform this operation");
     }
 }

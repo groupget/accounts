@@ -20,7 +20,7 @@
         <java.version>11</java.version>
 
         <swagger.version>2.9.2</swagger.version>
-        <cognito.version>1.11.529</cognito.version>
+        <cognito.version>1.11.534</cognito.version>
     </properties>
 
     <dependencies>

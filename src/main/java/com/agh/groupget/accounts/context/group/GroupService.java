@@ -1,31 +1,78 @@
 package com.agh.groupget.accounts.context.group;
 
+import com.agh.groupget.accounts.domain.exception.BusinessException;
 import com.agh.groupget.accounts.infrastructure.CognitoRequestFactory;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
-import com.amazonaws.services.cognitoidp.model.AdminListGroupsForUserRequest;
-import com.amazonaws.services.cognitoidp.model.GroupType;
+import com.amazonaws.services.cognitoidp.model.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-class GroupService {
+final class GroupService {
 
     private final AWSCognitoIdentityProvider awsCognitoIdentityProvider;
-    private final AdminListGroupsForUserRequest adminListGroupsForUserRequest;
+    private final CognitoRequestFactory cognitoRequestFactory;
 
-    GroupService(AWSCognitoIdentityProvider awsCognitoIdentityProvider, CognitoRequestFactory   cognitoRequestFactory) {
+    GroupService(AWSCognitoIdentityProvider awsCognitoIdentityProvider, CognitoRequestFactory cognitoRequestFactory) {
         this.awsCognitoIdentityProvider = awsCognitoIdentityProvider;
-        adminListGroupsForUserRequest = cognitoRequestFactory.adminListGroupsForUserRequest();
+        this.cognitoRequestFactory = cognitoRequestFactory;
     }
 
     Set<String> userGroups(String username) {
-        adminListGroupsForUserRequest.setUsername(username);
-        return awsCognitoIdentityProvider.adminListGroupsForUser(adminListGroupsForUserRequest)
+        AdminListGroupsForUserRequest awsRequest = cognitoRequestFactory.adminListGroupsForUserRequest();
+        awsRequest.setUsername(username);
+        return awsCognitoIdentityProvider.adminListGroupsForUser(awsRequest)
                 .getGroups()
                 .stream()
                 .map(GroupType::getGroupName)
                 .collect(Collectors.toSet());
+    }
+
+    //todo: n+1...
+    void createGroup(CreateGroupRequest request) {
+        validateUsersExist(request);
+        createEmptyGroup(request);
+        addUsersToGroup(request);
+    }
+
+    void deleteUserFromGroup(String groupName, String username) {
+        AdminRemoveUserFromGroupRequest awsRequest = cognitoRequestFactory.adminRemoveUserFromGroupRequest();
+        awsRequest.setGroupName(groupName);
+        awsRequest.setUsername(username);
+        awsCognitoIdentityProvider.adminRemoveUserFromGroup(awsRequest);
+    }
+
+    private void createEmptyGroup(CreateGroupRequest request) {
+        com.amazonaws.services.cognitoidp.model.CreateGroupRequest awsRequest = cognitoRequestFactory.createGroupRequest();
+        awsRequest.setGroupName(request.groupName);
+        awsRequest.setDescription(request.description);
+        try {
+            awsCognitoIdentityProvider.createGroup(awsRequest);
+        } catch (GroupExistsException e) {
+            throw new BusinessException(e.getErrorMessage());
+        }
+    }
+
+    private void addUsersToGroup(CreateGroupRequest request) {
+        for (String username : request.usernames) {
+            AdminAddUserToGroupRequest awsRequest = cognitoRequestFactory.adminAddUserToGroupRequest();
+            awsRequest.setGroupName(request.groupName);
+            awsRequest.setUsername(username);
+            awsCognitoIdentityProvider.adminAddUserToGroup(awsRequest);
+        }
+    }
+
+    private void validateUsersExist(CreateGroupRequest request) {
+        for (String username : request.usernames) {
+            AdminGetUserRequest awsRequest = cognitoRequestFactory.adminGetUserRequest();
+            awsRequest.setUsername(username);
+            try {
+                awsCognitoIdentityProvider.adminGetUser(awsRequest);
+            } catch (UserNotFoundException e) {
+                throw new BusinessException("Username " + username + " doesn't exist.");
+            }
+        }
     }
 }

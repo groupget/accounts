@@ -42,4 +42,28 @@ public final class CognitoRequestFactory {
         adminListGroupsForUserRequest.setUserPoolId(userPoolId);
         return adminListGroupsForUserRequest;
     }
+
+    public CreateGroupRequest createGroupRequest() {
+        CreateGroupRequest createGroupRequest = new CreateGroupRequest();
+        createGroupRequest.setUserPoolId(userPoolId);
+        return createGroupRequest;
+    }
+
+    public AdminAddUserToGroupRequest adminAddUserToGroupRequest() {
+        AdminAddUserToGroupRequest adminAddUserToGroupRequest = new AdminAddUserToGroupRequest();
+        adminAddUserToGroupRequest.setUserPoolId(userPoolId);
+        return adminAddUserToGroupRequest;
+    }
+
+    public AdminRemoveUserFromGroupRequest adminRemoveUserFromGroupRequest() {
+        AdminRemoveUserFromGroupRequest request = new AdminRemoveUserFromGroupRequest();
+        request.setUserPoolId(userPoolId);
+        return request;
+    }
+
+    public GetGroupRequest getGroupRequest() {
+        GetGroupRequest request = new GetGroupRequest();
+        request.setUserPoolId(userPoolId);
+        return request;
+    }
 }
