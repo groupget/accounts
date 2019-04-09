@@ -31,32 +31,40 @@ public final class CognitoRequestFactory {
         return adminDeleteUserRequest;
     }
 
-    public AdminGetUserRequest adminGetUserRequest() {
-        AdminGetUserRequest adminGetUserRequest = new AdminGetUserRequest();
-        adminGetUserRequest.setUserPoolId(userPoolId);
-        return adminGetUserRequest;
+    public AdminGetUserRequest adminGetUserRequest(String username) {
+        AdminGetUserRequest request = new AdminGetUserRequest();
+        request.setUsername(username);
+        request.setUserPoolId(userPoolId);
+        return request;
     }
 
-    public AdminListGroupsForUserRequest adminListGroupsForUserRequest() {
-        AdminListGroupsForUserRequest adminListGroupsForUserRequest = new AdminListGroupsForUserRequest();
-        adminListGroupsForUserRequest.setUserPoolId(userPoolId);
-        return adminListGroupsForUserRequest;
+    public AdminListGroupsForUserRequest adminListGroupsForUserRequest(String username) {
+        AdminListGroupsForUserRequest request = new AdminListGroupsForUserRequest();
+        request.setUserPoolId(userPoolId);
+        request.setUsername(username);
+        return request;
     }
 
-    public CreateGroupRequest createGroupRequest() {
+    public CreateGroupRequest createGroupRequest(String groupName, String description) {
         CreateGroupRequest createGroupRequest = new CreateGroupRequest();
         createGroupRequest.setUserPoolId(userPoolId);
+        createGroupRequest.setGroupName(groupName);
+        createGroupRequest.setDescription(description);
         return createGroupRequest;
     }
 
-    public AdminAddUserToGroupRequest adminAddUserToGroupRequest() {
-        AdminAddUserToGroupRequest adminAddUserToGroupRequest = new AdminAddUserToGroupRequest();
-        adminAddUserToGroupRequest.setUserPoolId(userPoolId);
-        return adminAddUserToGroupRequest;
+    public AdminAddUserToGroupRequest adminAddUserToGroupRequest(String groupName, String username) {
+        AdminAddUserToGroupRequest request = new AdminAddUserToGroupRequest();
+        request.setUserPoolId(userPoolId);
+        request.setGroupName(groupName);
+        request.setUsername(username);
+        return request;
     }
 
-    public AdminRemoveUserFromGroupRequest adminRemoveUserFromGroupRequest() {
+    public AdminRemoveUserFromGroupRequest adminRemoveUserFromGroupRequest(String groupName, String username) {
         AdminRemoveUserFromGroupRequest request = new AdminRemoveUserFromGroupRequest();
+        request.setGroupName(groupName);
+        request.setUsername(username);
         request.setUserPoolId(userPoolId);
         return request;
     }

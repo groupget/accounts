@@ -21,8 +21,7 @@ final class GroupService {
     }
 
     Set<String> userGroups(String username) {
-        AdminListGroupsForUserRequest awsRequest = cognitoRequestFactory.adminListGroupsForUserRequest();
-        awsRequest.setUsername(username);
+        AdminListGroupsForUserRequest awsRequest = cognitoRequestFactory.adminListGroupsForUserRequest(username);
         return awsCognitoIdentityProvider.adminListGroupsForUser(awsRequest)
                 .getGroups()
                 .stream()
@@ -38,16 +37,13 @@ final class GroupService {
     }
 
     void deleteUserFromGroup(String groupName, String username) {
-        AdminRemoveUserFromGroupRequest awsRequest = cognitoRequestFactory.adminRemoveUserFromGroupRequest();
-        awsRequest.setGroupName(groupName);
-        awsRequest.setUsername(username);
+        AdminRemoveUserFromGroupRequest awsRequest = cognitoRequestFactory.adminRemoveUserFromGroupRequest(groupName, username);
         awsCognitoIdentityProvider.adminRemoveUserFromGroup(awsRequest);
     }
 
     private void createEmptyGroup(CreateGroupRequest request) {
-        com.amazonaws.services.cognitoidp.model.CreateGroupRequest awsRequest = cognitoRequestFactory.createGroupRequest();
-        awsRequest.setGroupName(request.groupName);
-        awsRequest.setDescription(request.description);
+        com.amazonaws.services.cognitoidp.model.CreateGroupRequest awsRequest =
+                cognitoRequestFactory.createGroupRequest(request.groupName, request.description);
         try {
             awsCognitoIdentityProvider.createGroup(awsRequest);
         } catch (GroupExistsException e) {
@@ -57,17 +53,14 @@ final class GroupService {
 
     private void addUsersToGroup(CreateGroupRequest request) {
         for (String username : request.usernames) {
-            AdminAddUserToGroupRequest awsRequest = cognitoRequestFactory.adminAddUserToGroupRequest();
-            awsRequest.setGroupName(request.groupName);
-            awsRequest.setUsername(username);
+            AdminAddUserToGroupRequest awsRequest = cognitoRequestFactory.adminAddUserToGroupRequest(request.groupName, username);
             awsCognitoIdentityProvider.adminAddUserToGroup(awsRequest);
         }
     }
 
     private void validateUsersExist(CreateGroupRequest request) {
         for (String username : request.usernames) {
-            AdminGetUserRequest awsRequest = cognitoRequestFactory.adminGetUserRequest();
-            awsRequest.setUsername(username);
+            AdminGetUserRequest awsRequest = cognitoRequestFactory.adminGetUserRequest(username);
             try {
                 awsCognitoIdentityProvider.adminGetUser(awsRequest);
             } catch (UserNotFoundException e) {

@@ -27,7 +27,7 @@ class UserService {
         listGroupsRequest = cognitoRequestFactory.listGroupsRequest();
         listUsersRequest = cognitoRequestFactory.listUsersRequest();
         adminDeleteUserRequest = cognitoRequestFactory.adminDeleteUserRequest();
-        adminGetUserRequest = cognitoRequestFactory.adminGetUserRequest();
+        adminGetUserRequest = cognitoRequestFactory.adminGetUserRequest(username);
     }
 
     Set<String> getAllUsernames() {
