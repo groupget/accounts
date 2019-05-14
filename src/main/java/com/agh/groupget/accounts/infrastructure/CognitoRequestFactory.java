@@ -69,8 +69,16 @@ public final class CognitoRequestFactory {
         return request;
     }
 
-    public GetGroupRequest getGroupRequest() {
+    public GetGroupRequest getGroupRequest(String groupName) {
         GetGroupRequest request = new GetGroupRequest();
+        request.setGroupName(groupName);
+        request.setUserPoolId(userPoolId);
+        return request;
+    }
+
+    public ListUsersInGroupRequest listUsersInGroupRequest(String groupName) {
+        ListUsersInGroupRequest request = new ListUsersInGroupRequest();
+        request.setGroupName(groupName);
         request.setUserPoolId(userPoolId);
         return request;
     }

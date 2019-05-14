@@ -29,6 +29,12 @@ final class GroupEndpoint {
         return ResponseEntity.ok(userGroups);
     }
 
+    @GetMapping("/{groupName}")
+    ResponseEntity<GroupDetailsDto> groupDetails(@PathVariable String groupName) {
+        GroupDetailsDto groupDetailsDto = groupService.groupDetails(groupName);
+        return ResponseEntity.ok(groupDetailsDto);
+    }
+
     @PostMapping
     HttpStatus createGroup(@RequestBody @Valid CreateGroupRequest request) {
         groupService.createGroup(request);

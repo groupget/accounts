@@ -25,7 +25,7 @@ public class UserBasicInfo {
         return username;
     }
 
-    public Set<String> group() {
+    public Set<String> groups() {
         return groups;
     }
 
