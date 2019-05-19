@@ -5,23 +5,19 @@ import com.agh.groupget.accounts.domain.exception.ResourceNotFoundException;
 import com.agh.groupget.accounts.infrastructure.CognitoRequestFactory;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
 import com.amazonaws.services.cognitoidp.model.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 final class GroupService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GroupService.class);
-
     private final AWSCognitoIdentityProvider awsCognitoIdentityProvider;
     private final CognitoRequestFactory cognitoRequestFactory;
 
     GroupService(AWSCognitoIdentityProvider awsCognitoIdentityProvider, CognitoRequestFactory cognitoRequestFactory) {
-        LOGGER.error("AWS_ACCESS_KEY_ID = " + System.getenv("AWS_ACCESS_KEY_ID"));
         this.awsCognitoIdentityProvider = awsCognitoIdentityProvider;
         this.cognitoRequestFactory = cognitoRequestFactory;
     }
