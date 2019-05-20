@@ -6,7 +6,10 @@ import com.agh.groupget.accounts.infrastructure.CognitoRequestFactory;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
 import com.amazonaws.services.cognitoidp.model.*;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -67,14 +70,18 @@ final class GroupService {
     }
 
     private void addUsersToGroup(CreateGroupRequest request) {
-        for (String username : request.usernames) {
+        Set<String> usernames = Optional.ofNullable(request.usernames)
+                                      .orElse(Collections.emptySet());
+        for (String username : usernames) {
             AdminAddUserToGroupRequest awsRequest = cognitoRequestFactory.adminAddUserToGroupRequest(request.groupName, username);
             awsCognitoIdentityProvider.adminAddUserToGroup(awsRequest);
         }
     }
 
     private void validateUserExists(CreateGroupRequest request) {
-        for (String username : request.usernames) {
+        Set<String> usernames = Optional.ofNullable(request.usernames)
+                                        .orElse(Collections.emptySet());
+        for (String username : usernames) {
             AdminGetUserRequest awsRequest = cognitoRequestFactory.adminGetUserRequest(username);
             try {
                 awsCognitoIdentityProvider.adminGetUser(awsRequest);
