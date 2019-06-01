@@ -2,6 +2,7 @@ package com.agh.groupget.accounts.infrastructure;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
+import com.amazonaws.auth.PropertiesFileCredentialsProvider;
 import com.amazonaws.services.cognitoidp.model.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -10,31 +11,31 @@ import org.springframework.stereotype.Component;
 public final class CognitoRequestFactory {
 
     private final String userPoolId;
-    private final AWSCredentialsProvider credentialsProvider;
+//    private final AWSCredentialsProvider credentialsProvider;
 
     CognitoRequestFactory(@Value("${security.cognito.userPoolId}") String userPoolId) {
-        credentialsProvider = new EnvironmentVariableCredentialsProvider();
+//        credentialsProvider = new EnvironmentVariableCredentialsProvider();
         this.userPoolId = userPoolId;
     }
 
     public ListUsersRequest listUsersRequest() {
         ListUsersRequest listUsersRequest = new ListUsersRequest();
         listUsersRequest.setUserPoolId(userPoolId);
-        listUsersRequest.setRequestCredentialsProvider(credentialsProvider);
+//        listUsersRequest.setRequestCredentialsProvider(credentialsProvider);
         return listUsersRequest;
     }
 
     public ListGroupsRequest listGroupsRequest() {
         ListGroupsRequest listGroupsRequest = new ListGroupsRequest();
         listGroupsRequest.setUserPoolId(userPoolId);
-        listGroupsRequest.setRequestCredentialsProvider(credentialsProvider);
+//        listGroupsRequest.setRequestCredentialsProvider(credentialsProvider);
         return listGroupsRequest;
     }
 
     public AdminDeleteUserRequest adminDeleteUserRequest() {
         AdminDeleteUserRequest adminDeleteUserRequest = new AdminDeleteUserRequest();
         adminDeleteUserRequest.setUserPoolId(userPoolId);
-        adminDeleteUserRequest.setRequestCredentialsProvider(credentialsProvider);
+//        adminDeleteUserRequest.setRequestCredentialsProvider(credentialsProvider);
         return adminDeleteUserRequest;
     }
 
@@ -42,7 +43,7 @@ public final class CognitoRequestFactory {
         AdminGetUserRequest request = new AdminGetUserRequest();
         request.setUsername(username);
         request.setUserPoolId(userPoolId);
-        request.setRequestCredentialsProvider(credentialsProvider);
+//        request.setRequestCredentialsProvider(credentialsProvider);
         return request;
     }
 
@@ -50,7 +51,7 @@ public final class CognitoRequestFactory {
         AdminListGroupsForUserRequest request = new AdminListGroupsForUserRequest();
         request.setUserPoolId(userPoolId);
         request.setUsername(username);
-        request.setRequestCredentialsProvider(credentialsProvider);
+//        request.setRequestCredentialsProvider(credentialsProvider);
         return request;
     }
 
@@ -59,7 +60,7 @@ public final class CognitoRequestFactory {
         createGroupRequest.setUserPoolId(userPoolId);
         createGroupRequest.setGroupName(groupName);
         createGroupRequest.setDescription(description);
-        createGroupRequest.setRequestCredentialsProvider(credentialsProvider);
+//        createGroupRequest.setRequestCredentialsProvider(credentialsProvider);
         return createGroupRequest;
     }
 
@@ -68,7 +69,7 @@ public final class CognitoRequestFactory {
         request.setUserPoolId(userPoolId);
         request.setGroupName(groupName);
         request.setUsername(username);
-        request.setRequestCredentialsProvider(credentialsProvider);
+//        request.setRequestCredentialsProvider(credentialsProvider);
         return request;
     }
 
@@ -77,7 +78,7 @@ public final class CognitoRequestFactory {
         request.setGroupName(groupName);
         request.setUsername(username);
         request.setUserPoolId(userPoolId);
-        request.setRequestCredentialsProvider(credentialsProvider);
+//        request.setRequestCredentialsProvider(credentialsProvider);
         return request;
     }
 
@@ -85,7 +86,7 @@ public final class CognitoRequestFactory {
         GetGroupRequest request = new GetGroupRequest();
         request.setGroupName(groupName);
         request.setUserPoolId(userPoolId);
-        request.setRequestCredentialsProvider(credentialsProvider);
+//        request.setRequestCredentialsProvider(credentialsProvider);
         return request;
     }
 
@@ -93,7 +94,7 @@ public final class CognitoRequestFactory {
         ListUsersInGroupRequest request = new ListUsersInGroupRequest();
         request.setGroupName(groupName);
         request.setUserPoolId(userPoolId);
-        request.setRequestCredentialsProvider(credentialsProvider);
+//        request.setRequestCredentialsProvider(credentialsProvider);
         return request;
     }
 }

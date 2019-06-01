@@ -1,4 +1,4 @@
-package com.agh.groupget.accounts.context.group;
+package com.agh.groupget.accounts.context.group.dto;
 
 import java.util.Set;
 

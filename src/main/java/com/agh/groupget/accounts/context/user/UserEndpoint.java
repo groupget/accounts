@@ -1,34 +1,29 @@
 package com.agh.groupget.accounts.context.user;
 
-import org.springframework.http.HttpStatus;
+import com.agh.groupget.accounts.context.user.dto.UserInvitationsDto;
+import com.agh.groupget.accounts.domain.UserBasicInfo;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Set;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/users")
-class UserEndpoint {
+@RequestMapping("/groups")
+final class UserEndpoint {
 
+    private final UserBasicInfo userBasicInfo;
     private final UserService userService;
 
-    UserEndpoint(UserService userService) {
+    UserEndpoint(UserBasicInfo userBasicInfo, UserService userService) {
+        this.userBasicInfo = userBasicInfo;
         this.userService = userService;
     }
 
-    @GetMapping("/usernames")
-    ResponseEntity<Set<String>> allUsernames() {
-        Set<String> allUsernames = userService.getAllUsernames();
-        return ResponseEntity.ok(allUsernames);
+    @GetMapping("/invitations")
+    ResponseEntity<UserInvitationsDto> userInvitations() {
+        UserInvitationsDto userInvitationsDto = userService.userInvitations(userBasicInfo.username());
+        return ResponseEntity.ok(userInvitationsDto);
     }
-
-//    @GetMapping("/user")
-//    ResponseEntity<UserBasicInfo> user() {}
-
-//    @DeleteMapping("/{username}")
-//    HttpStatus deleteUser(@PathVariable String username) {
-//        userService.deleteUser(username);
-//        return HttpStatus.OK;
-//    }
 }

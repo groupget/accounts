@@ -1,5 +1,8 @@
 package com.agh.groupget.accounts.context.group;
 
+import com.agh.groupget.accounts.context.group.dto.CreateGroupRequest;
+import com.agh.groupget.accounts.context.group.dto.GroupDetailsDto;
+import com.agh.groupget.accounts.context.group.dto.InviteUserToGroupRequest;
 import com.agh.groupget.accounts.domain.UserBasicInfo;
 import com.agh.groupget.accounts.domain.exception.ForbiddenException;
 import org.springframework.http.HttpStatus;
@@ -7,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Set;
 
 @RestController
 @CrossOrigin
@@ -22,17 +24,22 @@ final class GroupEndpoint {
         this.groupService = groupService;
     }
 
-    @GetMapping("/userGroups")
-    ResponseEntity<Set<String>> userGroups() {
-        String username = userBasicInfo.username();
-        Set<String> userGroups = groupService.userGroups(username);
-        return ResponseEntity.ok(userGroups);
-    }
-
     @GetMapping("/{groupName}")
     ResponseEntity<GroupDetailsDto> groupDetails(@PathVariable String groupName) {
         GroupDetailsDto groupDetailsDto = groupService.groupDetails(groupName);
         return ResponseEntity.ok(groupDetailsDto);
+    }
+
+    @PatchMapping("/{groupName}/invitations")
+    HttpStatus inviteUserToGroup(@PathVariable String groupName, @RequestBody @Valid InviteUserToGroupRequest request) {
+        groupService.inviteUserToGroup(groupName, request);
+        return HttpStatus.OK;
+    }
+
+    @PatchMapping("/{groupName}/users")
+    HttpStatus addUserToGroup(@PathVariable String groupName) {
+        groupService.addUserToGroup(groupName, userBasicInfo.username());
+        return HttpStatus.OK;
     }
 
     @PostMapping

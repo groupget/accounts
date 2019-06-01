@@ -1,4 +1,4 @@
-package com.agh.groupget.accounts.context.group;
+package com.agh.groupget.accounts.context.group.dto;
 
 import org.springframework.validation.annotation.Validated;
 
