@@ -30,7 +30,7 @@ final class GroupEndpoint {
         return ResponseEntity.ok(groupDetailsDto);
     }
 
-    @PatchMapping("/{groupName}/invitations")
+    @PostMapping("/{groupName}/invitations")
     HttpStatus inviteUserToGroup(@PathVariable String groupName, @RequestBody @Valid InviteUserToGroupRequest request) {
         if (!userBasicInfo.isUserInGroup(groupName)) {
             throw new ForbiddenException();
@@ -40,7 +40,7 @@ final class GroupEndpoint {
         return HttpStatus.OK;
     }
 
-    @PatchMapping("/{groupName}/users")
+    @PostMapping("/{groupName}/users")
     HttpStatus addUserToGroup(@PathVariable String groupName) {
         groupService.addUserToGroup(groupName, userBasicInfo.username());
         return HttpStatus.OK;
