@@ -44,7 +44,6 @@ class ServiceExceptionHandler {
         response.code = String.valueOf(HttpStatus.NOT_FOUND.value());
         response.message = ex.getMessage();
 
-        LOGGER.info("heroku test: ", ex);
         LOGGER.info("HTTP 404 - {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
