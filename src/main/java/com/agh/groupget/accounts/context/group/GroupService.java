@@ -2,6 +2,7 @@ package com.agh.groupget.accounts.context.group;
 
 import com.agh.groupget.accounts.context.group.dto.GroupDetailsDto;
 import com.agh.groupget.accounts.context.group.dto.InviteUserToGroupRequest;
+import com.agh.groupget.accounts.domain.Invitation;
 import com.agh.groupget.accounts.domain.InvitationRepository;
 import com.agh.groupget.accounts.domain.exception.BusinessException;
 import com.agh.groupget.accounts.domain.exception.ResourceNotFoundException;
@@ -48,15 +49,20 @@ final class GroupService {
         String username = request.username;
         validateGroupExist(groupName);
         validateUserExists(username);
-        if (invitationRepository.doesInvicationExist(groupName, username)) {
+        if (invitationRepository.findByUsernameAndGroupName(groupName, username)
+                                .isPresent()) {
             throw new BusinessException("User " + username + " is already invited to group " + groupName);
         }
 
-        invitationRepository.inviteUserToGroup(groupName, username);
+        Invitation invitation = new Invitation();
+        invitation.setUsername(username);
+        invitation.setGroupName(groupName);
+        invitationRepository.save(invitation);
     }
 
     void addUserToGroup(String groupName, String username) {
-        if (!invitationRepository.doesInvicationExist(groupName, username)) {
+        if (invitationRepository.findByUsernameAndGroupName(username, groupName)
+                                .isEmpty()) {
             throw new BusinessException("User " + username + " is not invited to group " + groupName);
         }
 

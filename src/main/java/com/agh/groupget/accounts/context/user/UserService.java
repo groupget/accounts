@@ -1,10 +1,13 @@
 package com.agh.groupget.accounts.context.user;
 
 import com.agh.groupget.accounts.context.user.dto.UserInvitationsDto;
+import com.agh.groupget.accounts.domain.Invitation;
 import com.agh.groupget.accounts.domain.InvitationRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 final class UserService {
@@ -16,10 +19,15 @@ final class UserService {
     }
 
     UserInvitationsDto userInvitations(String username) {
-        Set<String> userInvitations = invitationRepository.findUserInvitations(username);
+        Set<Invitation> invitations = invitationRepository.findByUsername(username)
+                                                              .orElse(Collections.emptySet());
+        Set<String> groupNames = invitations.stream()
+                                         .map(Invitation::getGroupName)
+                                         .collect(Collectors.toSet());
+
         UserInvitationsDto userInvitationsDto = new UserInvitationsDto();
         userInvitationsDto.username = username;
-        userInvitationsDto.groupNames = userInvitations;
+        userInvitationsDto.groupNames = groupNames;
         return userInvitationsDto;
     }
 }

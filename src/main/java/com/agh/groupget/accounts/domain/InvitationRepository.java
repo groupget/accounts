@@ -1,12 +1,16 @@
 package com.agh.groupget.accounts.domain;
 
+import org.socialsignin.spring.data.dynamodb.repository.EnableScan;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
 import java.util.Set;
 
-public interface InvitationRepository {
+@EnableScan
+public interface InvitationRepository extends CrudRepository<Invitation, String> {
 
-    void inviteUserToGroup(String groupName, String username);
+    Optional<Set<Invitation>> findByUsername(String username);
 
-    Set<String> findUserInvitations(String username);
-
-    boolean doesInvicationExist(String groupName, String username);
+    Optional<Invitation> findByUsernameAndGroupName(String username, String groupName);
 }

@@ -32,6 +32,10 @@ final class GroupEndpoint {
 
     @PatchMapping("/{groupName}/invitations")
     HttpStatus inviteUserToGroup(@PathVariable String groupName, @RequestBody @Valid InviteUserToGroupRequest request) {
+        if (!userBasicInfo.isUserInGroup(groupName)) {
+            throw new ForbiddenException();
+        }
+
         groupService.inviteUserToGroup(groupName, request);
         return HttpStatus.OK;
     }
@@ -50,7 +54,7 @@ final class GroupEndpoint {
 
     @DeleteMapping("/{groupName}/users/{username}")
     HttpStatus deleteUserFromGroup(@PathVariable String groupName, @PathVariable String username) {
-        if (!userBasicInfo.isRemovalUsersFromGroupPermitted(groupName)) {
+        if (!userBasicInfo.isUserInGroup(groupName)) {
             throw new ForbiddenException();
         }
 

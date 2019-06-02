@@ -25,7 +25,7 @@ public class UserBasicInfo {
         return groups;
     }
 
-    public boolean isRemovalUsersFromGroupPermitted(String groupName) {
+    public boolean isUserInGroup(String groupName) {
         return groups.stream()
               .anyMatch(groupName::equals);
     }

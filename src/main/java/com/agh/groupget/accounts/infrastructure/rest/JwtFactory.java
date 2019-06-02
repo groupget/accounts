@@ -12,6 +12,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.context.annotation.RequestScope;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -37,10 +39,11 @@ class JwtFactory {
     }
 
     private UserBasicInfo getUserJwtInfoFromJwt(DecodedJWT decodedJWT) {
-        String username = decodedJWT.getClaim("cognito:username")
+        String username = decodedJWT.getClaim("email")
                 .asString();
-        Set<String> groups = ImmutableSet.copyOf(decodedJWT.getClaim("cognito:groups")
-                .asList(String.class));
+        Set<String> groups = ImmutableSet.copyOf(Optional.ofNullable(decodedJWT.getClaim("cognito:groups")
+                                                                               .asList(String.class))
+                                                         .orElse(Collections.emptyList()));
         return new UserBasicInfo(username, groups);
     }
 
