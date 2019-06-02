@@ -9,8 +9,6 @@ import com.agh.groupget.accounts.domain.exception.ResourceNotFoundException;
 import com.agh.groupget.accounts.infrastructure.CognitoRequestFactory;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
 import com.amazonaws.services.cognitoidp.model.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -21,8 +19,6 @@ import java.util.stream.Collectors;
 
 @Service
 final class GroupService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(GroupService.class);
 
     private final AWSCognitoIdentityProvider awsCognitoIdentityProvider;
     private final CognitoRequestFactory cognitoRequestFactory;
@@ -125,7 +121,6 @@ final class GroupService {
         try {
             awsCognitoIdentityProvider.getGroup(getGroupRequest);
         } catch (Exception e) {
-            LOGGER.info("heroku test: ", e);
             throw new ResourceNotFoundException("Group " + groupName + " doesn't exist.");
         }
     }
