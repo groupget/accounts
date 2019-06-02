@@ -54,20 +54,20 @@ final class GroupService {
             throw new BusinessException("User " + username + " is already invited to group " + groupName);
         }
 
-        Invitation invitation = new Invitation();
-        invitation.setUsername(username);
-        invitation.setGroupName(groupName);
+        Invitation invitation = new Invitation(username, groupName);
         invitationRepository.save(invitation);
     }
 
     void addUserToGroup(String groupName, String username) {
-        if (invitationRepository.findByUsernameAndGroupName(username, groupName)
-                                .isEmpty()) {
+        Optional<Invitation> invitation = invitationRepository.findByUsernameAndGroupName(username, groupName);
+        if (invitation.isEmpty()) {
             throw new BusinessException("User " + username + " is not invited to group " + groupName);
         }
 
         AdminAddUserToGroupRequest awsRequest = cognitoRequestFactory.adminAddUserToGroupRequest(groupName, username);
         awsCognitoIdentityProvider.adminAddUserToGroup(awsRequest);
+
+        invitationRepository.delete(invitation.get());
     }
 
     //todo: n+1...

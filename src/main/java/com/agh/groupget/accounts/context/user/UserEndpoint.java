@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/groups")
+@RequestMapping("/users")
 final class UserEndpoint {
 
     private final UserBasicInfo userBasicInfo;
