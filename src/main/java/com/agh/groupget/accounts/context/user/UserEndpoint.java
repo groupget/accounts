@@ -2,11 +2,9 @@ package com.agh.groupget.accounts.context.user;
 
 import com.agh.groupget.accounts.context.user.dto.UserInvitationsDto;
 import com.agh.groupget.accounts.domain.UserBasicInfo;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
@@ -25,5 +23,11 @@ final class UserEndpoint {
     ResponseEntity<UserInvitationsDto> userInvitations() {
         UserInvitationsDto userInvitationsDto = userService.userInvitations(userBasicInfo.username());
         return ResponseEntity.ok(userInvitationsDto);
+    }
+
+    @DeleteMapping("/invitations/{groupName}")
+    HttpStatus deleteInvitation(@PathVariable String groupName) {
+        userService.deleteInvitation(groupName, userBasicInfo.username());
+        return HttpStatus.OK;
     }
 }
